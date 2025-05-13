@@ -318,8 +318,8 @@ export default function CreativeQuoteForm() {
       return (
         formData.fromZip.length === 5 &&
         formData.toZip.length === 5 &&
-        formData.fromAddress.street &&
-        formData.toAddress.street &&
+        formData.fromAddress.city &&
+        formData.toAddress.city &&
         !invalidFromZip &&
         !invalidToZip
       )
@@ -439,18 +439,30 @@ export default function CreativeQuoteForm() {
                             The ZIP code you entered doesn't appear to be valid. Please enter a valid ZIP code.
                           </p>
                         </motion.div>
-                      ) : formData.fromAddress.street && (
+                      ) : formData.fromAddress.city && (
                         <motion.div
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: "auto" }}
-                          className="bg-blue-50 dark:bg-blue-900/30 p-3 rounded-lg"
+                          className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 p-4 rounded-lg shadow-sm border border-blue-100 dark:border-blue-800/30"
                         >
-                          <p className="text-sm font-medium">Found Address:</p>
-                          <p className="text-sm text-gray-600 dark:text-gray-300">
-                            {formData.fromAddress.street}
-                            <br />
-                            {formData.fromAddress.city}, {formData.fromAddress.state} {formData.fromAddress.zipCode}
-                          </p>
+                          <div className="flex items-center mb-2">
+                            <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center mr-2">
+                              <MapPin className="h-3 w-3 text-white" />
+                            </div>
+                            <p className="text-sm font-semibold text-blue-700 dark:text-blue-300">Location Found</p>
+                          </div>
+                          <div className="ml-7 text-sm">
+                            <div className="space-y-2">
+                              <div className="flex items-center">
+                                <span className="font-medium text-gray-700 dark:text-gray-300 w-16">City:</span>
+                                <span className="text-gray-800 dark:text-gray-200 font-semibold">{formData.fromAddress.city}</span>
+                              </div>
+                              <div className="flex items-center">
+                                <span className="font-medium text-gray-700 dark:text-gray-300 w-16">State:</span>
+                                <span className="text-gray-800 dark:text-gray-200 font-semibold">{formData.fromAddress.state}</span>
+                              </div>
+                            </div>
+                          </div>
                         </motion.div>
                       )}
                     </div>
@@ -490,18 +502,30 @@ export default function CreativeQuoteForm() {
                             The ZIP code you entered doesn't appear to be valid. Please enter a valid ZIP code.
                           </p>
                         </motion.div>
-                      ) : formData.toAddress.street && (
+                      ) : formData.toAddress.city && (
                         <motion.div
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: "auto" }}
-                          className="bg-blue-50 dark:bg-blue-900/30 p-3 rounded-lg"
+                          className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 p-4 rounded-lg shadow-sm border border-blue-100 dark:border-blue-800/30"
                         >
-                          <p className="text-sm font-medium">Found Address:</p>
-                          <p className="text-sm text-gray-600 dark:text-gray-300">
-                            {formData.toAddress.street}
-                            <br />
-                            {formData.toAddress.city}, {formData.toAddress.state} {formData.toAddress.zipCode}
-                          </p>
+                          <div className="flex items-center mb-2">
+                            <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center mr-2">
+                              <MapPin className="h-3 w-3 text-white" />
+                            </div>
+                            <p className="text-sm font-semibold text-blue-700 dark:text-blue-300">Location Found</p>
+                          </div>
+                          <div className="ml-7 text-sm">
+                            <div className="space-y-2">
+                              <div className="flex items-center">
+                                <span className="font-medium text-gray-700 dark:text-gray-300 w-16">City:</span>
+                                <span className="text-gray-800 dark:text-gray-200 font-semibold">{formData.toAddress.city}</span>
+                              </div>
+                              <div className="flex items-center">
+                                <span className="font-medium text-gray-700 dark:text-gray-300 w-16">State:</span>
+                                <span className="text-gray-800 dark:text-gray-200 font-semibold">{formData.toAddress.state}</span>
+                              </div>
+                            </div>
+                          </div>
                         </motion.div>
                       )}
                     </div>
