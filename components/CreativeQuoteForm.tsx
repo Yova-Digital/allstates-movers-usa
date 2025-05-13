@@ -46,6 +46,7 @@ export default function CreativeQuoteForm() {
     fromAddress: {} as Address,
     toAddress: {} as Address,
     movingDate: "",
+    deliveryDate: "",
     moveSize: "",
     fullName: "",
     email: "",
@@ -54,6 +55,8 @@ export default function CreativeQuoteForm() {
   const [lookingUpFrom, setLookingUpFrom] = useState(false)
   const [lookingUpTo, setLookingUpTo] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [invalidFromZip, setInvalidFromZip] = useState(false)
+  const [invalidToZip, setInvalidToZip] = useState(false)
   const { toast } = useToast()
 
   const updateFormData = (field: string, value: any) => {
@@ -101,39 +104,61 @@ export default function CreativeQuoteForm() {
 
         if (type === "from") {
           updateFormData("fromAddress", foundAddress);
+          setInvalidFromZip(false);
         } else {
           updateFormData("toAddress", foundAddress);
+          setInvalidToZip(false);
         }
-      } else {
-        // Fallback for when the API doesn't return useful results
+      } else if (zipCoordinates[zipCode]) {
+        // Fallback for when the API doesn't return useful results but we know the ZIP code
         const fallbackAddress: Address = {
           street: `${Math.floor(Math.random() * 999) + 100} Main St`,
-          city: zipCoordinates[zipCode] ? getZipCodeCity(zipCode) : "Unknown City",
-          state: zipCoordinates[zipCode] ? getZipCodeState(zipCode) : "US",
+          city: getZipCodeCity(zipCode),
+          state: getZipCodeState(zipCode),
           zipCode,
         };
 
         if (type === "from") {
           updateFormData("fromAddress", fallbackAddress);
+          setInvalidFromZip(false);
         } else {
           updateFormData("toAddress", fallbackAddress);
+          setInvalidToZip(false);
+        }
+      } else {
+        // Unknown ZIP code
+        if (type === "from") {
+          setInvalidFromZip(true);
+        } else {
+          setInvalidToZip(true);
         }
       }
     } catch (error) {
       console.error("Error fetching address data:", error);
       
-      // Fallback in case of error
-      const fallbackAddress: Address = {
-        street: `${Math.floor(Math.random() * 999) + 100} Main St`,
-        city: zipCoordinates[zipCode] ? getZipCodeCity(zipCode) : "Unknown City",
-        state: zipCoordinates[zipCode] ? getZipCodeState(zipCode) : "US",
-        zipCode,
-      };
+      if (zipCoordinates[zipCode]) {
+        // Fallback in case of error but we know the ZIP code
+        const fallbackAddress: Address = {
+          street: `${Math.floor(Math.random() * 999) + 100} Main St`,
+          city: getZipCodeCity(zipCode),
+          state: getZipCodeState(zipCode),
+          zipCode,
+        };
 
-      if (type === "from") {
-        updateFormData("fromAddress", fallbackAddress);
+        if (type === "from") {
+          updateFormData("fromAddress", fallbackAddress);
+          setInvalidFromZip(false);
+        } else {
+          updateFormData("toAddress", fallbackAddress);
+          setInvalidToZip(false);
+        }
       } else {
-        updateFormData("toAddress", fallbackAddress);
+        // Unknown ZIP code
+        if (type === "from") {
+          setInvalidFromZip(true);
+        } else {
+          setInvalidToZip(true);
+        }
       }
     } finally {
       if (type === "from") {
@@ -207,6 +232,7 @@ export default function CreativeQuoteForm() {
       fromAddress: {} as Address,
       toAddress: {} as Address,
       movingDate: "",
+      deliveryDate: "",
       moveSize: "",
       fullName: "",
       email: "",
@@ -293,10 +319,12 @@ export default function CreativeQuoteForm() {
         formData.fromZip.length === 5 &&
         formData.toZip.length === 5 &&
         formData.fromAddress.street &&
-        formData.toAddress.street
+        formData.toAddress.street &&
+        !invalidFromZip &&
+        !invalidToZip
       )
     } else if (stepIndex === 2) {
-      return formData.movingDate && formData.moveSize
+      return formData.movingDate && formData.deliveryDate && formData.moveSize
     } else if (stepIndex === 3) {
       return formData.fullName && formData.email && formData.phone
     }
@@ -390,7 +418,7 @@ export default function CreativeQuoteForm() {
                             updateFormData("fromZip", zip)
                             if (zip.length === 5) lookupAddress(zip, "from")
                           }}
-                          className="pr-10"
+                          className={`pr-10 ${invalidFromZip ? 'border-red-500 bg-red-50 dark:bg-red-900/20' : ''}`}
                           maxLength={5}
                         />
                         {lookingUpFrom && (
@@ -400,7 +428,18 @@ export default function CreativeQuoteForm() {
                         )}
                       </div>
 
-                      {formData.fromAddress.street && (
+                      {invalidFromZip ? (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          className="bg-red-50 dark:bg-red-900/30 p-3 rounded-lg"
+                        >
+                          <p className="text-sm font-medium text-red-600 dark:text-red-400">Invalid ZIP Code:</p>
+                          <p className="text-sm text-red-600 dark:text-red-400">
+                            The ZIP code you entered doesn't appear to be valid. Please enter a valid ZIP code.
+                          </p>
+                        </motion.div>
+                      ) : formData.fromAddress.street && (
                         <motion.div
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: "auto" }}
@@ -430,7 +469,7 @@ export default function CreativeQuoteForm() {
                             updateFormData("toZip", zip)
                             if (zip.length === 5) lookupAddress(zip, "to")
                           }}
-                          className="pr-10"
+                          className={`pr-10 ${invalidToZip ? 'border-red-500 bg-red-50 dark:bg-red-900/20' : ''}`}
                           maxLength={5}
                         />
                         {lookingUpTo && (
@@ -440,7 +479,18 @@ export default function CreativeQuoteForm() {
                         )}
                       </div>
 
-                      {formData.toAddress.street && (
+                      {invalidToZip ? (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          className="bg-red-50 dark:bg-red-900/30 p-3 rounded-lg"
+                        >
+                          <p className="text-sm font-medium text-red-600 dark:text-red-400">Invalid ZIP Code:</p>
+                          <p className="text-sm text-red-600 dark:text-red-400">
+                            The ZIP code you entered doesn't appear to be valid. Please enter a valid ZIP code.
+                          </p>
+                        </motion.div>
+                      ) : formData.toAddress.street && (
                         <motion.div
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: "auto" }}
@@ -457,30 +507,7 @@ export default function CreativeQuoteForm() {
                     </div>
                   </div>
 
-                  {formData.fromAddress.street && formData.toAddress.street && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl"
-                    >
-                      <div className="flex items-center justify-center">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-800 flex items-center justify-center">
-                            <MapPin className="h-4 w-4 text-blue-600 dark:text-blue-300" />
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium">Distance</p>
-                            <p className="text-lg font-bold">
-                              {calculateDistance(
-                                formData.fromAddress.zipCode,
-                                formData.toAddress.zipCode
-                              )} miles
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
+
                 </motion.div>
               )}
 
@@ -516,6 +543,22 @@ export default function CreativeQuoteForm() {
                         />
                       </div>
                     </div>
+                    
+                    <div className="space-y-4">
+                      <Label htmlFor="deliveryDate" className="text-base">
+                        When You Need It Delivered
+                      </Label>
+                      <div className="relative">
+                        <Input
+                          id="deliveryDate"
+                          type="date"
+                          value={formData.deliveryDate}
+                          onChange={(e) => updateFormData("deliveryDate", e.target.value)}
+                          min={formData.movingDate || new Date().toISOString().split("T")[0]}
+                          className="bg-white dark:bg-gray-800"
+                        />
+                      </div>
+                    </div>
 
                     <div className="space-y-4">
                       <Label htmlFor="moveSize" className="text-base">
@@ -544,12 +587,13 @@ export default function CreativeQuoteForm() {
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="mt-6 p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl"
+                        className="mt-6 p-5 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl"
                       >
-                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                          <div>
-                            <p className="text-sm font-medium">Selected Date</p>
-                            <p className="text-lg font-bold">
+                        <h4 className="text-base font-semibold mb-4 border-b border-purple-100 dark:border-purple-800/30 pb-2">Your Moving Details</h4>
+                        <div className="space-y-4">
+                          <div className="bg-white/70 dark:bg-gray-800/30 p-3 rounded-lg">
+                            <p className="text-sm font-medium text-purple-600 dark:text-purple-300 mb-1">Pickup Date</p>
+                            <p className="text-base font-bold">
                               {new Date(formData.movingDate).toLocaleDateString("en-US", {
                                 weekday: "long",
                                 year: "numeric",
@@ -558,9 +602,22 @@ export default function CreativeQuoteForm() {
                               })}
                             </p>
                           </div>
-                          <div>
-                            <p className="text-sm font-medium">Selected Size</p>
-                            <p className="text-lg font-bold">
+                          
+                          <div className="bg-white/70 dark:bg-gray-800/30 p-3 rounded-lg">
+                            <p className="text-sm font-medium text-purple-600 dark:text-purple-300 mb-1">Delivery Date</p>
+                            <p className="text-base font-bold">
+                              {new Date(formData.deliveryDate).toLocaleDateString("en-US", {
+                                weekday: "long",
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              })}
+                            </p>
+                          </div>
+                          
+                          <div className="bg-white/70 dark:bg-gray-800/30 p-3 rounded-lg">
+                            <p className="text-sm font-medium text-purple-600 dark:text-purple-300 mb-1">Move Size</p>
+                            <p className="text-base font-bold">
                               {formData.moveSize === "studio" ? "Studio" :
                                formData.moveSize === "1bedroom" ? "1 Bedroom" :
                                formData.moveSize === "2bedroom" ? "2 Bedroom" :
@@ -573,51 +630,7 @@ export default function CreativeQuoteForm() {
                         </div>
                       </motion.div>
                       
-                      {/* Express Delivery Options */}
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="mt-6 p-5 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-100 dark:border-blue-800/30"
-                      >
-                        <div className="space-y-4">
-                          <div className="flex items-center">
-                            <div className="shrink-0 bg-blue-100 dark:bg-blue-800/50 p-2 rounded-full mr-3">
-                              <Truck className="h-5 w-5 text-blue-600 dark:text-blue-300" />
-                            </div>
-                            <div>
-                              <h3 className="font-bold text-lg bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Express Delivery Options</h3>
-                              <p className="text-sm text-gray-600 dark:text-gray-300">Need it fast? We've got you covered.</p>
-                            </div>
-                          </div>
-                          
-                          <p className="text-sm text-gray-600 dark:text-gray-300">
-                            US50 Transport offers reliable express services for urgent moves and time-sensitive shipments.
-                          </p>
-                          
-                          <div className="bg-white/70 dark:bg-gray-800/30 rounded-lg p-3">
-                            <p className="font-medium text-sm mb-2">Choose from:</p>
-                            <ul className="space-y-1 text-sm pl-5 list-disc text-gray-600 dark:text-gray-300">
-                              <li>Same-Day Delivery (local moves only)</li>
-                              <li>Next-Day Delivery (up to 500 miles)</li>
-                              <li>Priority Express Service (coast-to-coast within 2–3 days)</li>
-                            </ul>
-                          </div>
-                          
-                          <div className="bg-white/70 dark:bg-gray-800/30 rounded-lg p-3">
-                            <p className="font-medium text-sm mb-2">Why choose Express?</p>
-                            <ul className="space-y-1 text-sm pl-5 list-disc text-gray-600 dark:text-gray-300">
-                              <li>Guaranteed delivery windows</li>
-                              <li>Real-time tracking</li>
-                              <li>Dedicated express support team</li>
-                            </ul>
-                          </div>
-                          
-                          <p className="text-xs text-gray-500 dark:text-gray-400 italic">
-                            Note: Express delivery options will be discussed after quote submission based on availability and your specific requirements.
-                          </p>
-                        </div>
-                      </motion.div>
+
                     </>
                   )}
                 </motion.div>
@@ -684,7 +697,7 @@ export default function CreativeQuoteForm() {
                       />
                     </div>
                   </div>
-
+                  
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}

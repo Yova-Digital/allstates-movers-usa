@@ -1,5 +1,6 @@
 import Link from "next/link"
-import { Facebook, Twitter, Instagram, Linkedin, Truck } from "lucide-react"
+import Image from "next/image"
+import { Facebook, Twitter, Instagram, Linkedin, Truck, Phone, Mail, MapPin } from "lucide-react"
 
 export default function Footer() {
   return (
@@ -7,9 +8,8 @@ export default function Footer() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           <div>
-            <div className="flex items-center space-x-2 mb-6">
-              <Truck className="h-8 w-8" />
-              <span className="text-xl font-bold">US50 Transport</span>
+            <div className="flex flex-col items-start space-y-3 mb-6">
+              <Image src="/logo.png" alt="Logo" width={100} height={100} className="rounded-lg"/>
             </div>
             <p className="text-gray-400 mb-6">
               Premium furniture moving services across all 50 states. Professional, reliable, and secure transportation
@@ -108,19 +108,23 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold mb-6">Contact Info</h3>
+            <h3 className="text-lg font-semibold mb-6 text-blue-400">Contact Info</h3>
             <ul className="space-y-3">
               <li className="flex items-start">
-                <span className="text-primary mr-2">Address:</span>
-                <span className="text-gray-400">All over the us</span>
+                <MapPin className="text-blue-500 h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
+                <span className="text-gray-400">All over the US</span>
               </li>
               <li className="flex items-start">
-                <span className="text-primary mr-2">Phone:</span>
-                <span className="text-gray-400">(475) 414-5317</span>
+                <Phone className="text-blue-500 h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
+                <div className="flex flex-col">
+                  <span className="text-gray-300 font-medium">Phone :</span>
+                  <Link href="tel:+14754145317" className="text-gray-400">(475) 414-5317</Link>
+                  <Link href="tel:+18144313470" className="text-gray-400">(814) 431-3470</Link>
+                </div>
               </li>
               <li className="flex items-start">
-                <span className="text-primary mr-2">Email:</span>
-                <span className="text-gray-400">Us50transportllc@gmail.com</span>
+                <Mail className="text-blue-500 h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
+                <Link href="mailto:Us50transportllc@gmail.com" className="text-gray-400">Us50transportllc@gmail.com</Link>
               </li>
             </ul>
           </div>
