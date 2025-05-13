@@ -40,7 +40,7 @@ export default function FormNavigation({
           type="button"
           onClick={nextStep}
           disabled={!isStepComplete(step)}
-          className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
+          className="flex items-center space-x-2 bg-blue-500 hover:bg-blue-600"
           size="lg"
         >
           Continue
@@ -50,7 +50,7 @@ export default function FormNavigation({
         <Button
           type="submit"
           disabled={isSubmitting || !isStepComplete(step)}
-          className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
+          className="flex items-center space-x-2 bg-blue-500 hover:bg-blue-600"
           size="lg"
         >
           {isSubmitting ? (

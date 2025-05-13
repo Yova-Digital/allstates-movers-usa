@@ -346,7 +346,7 @@ export default function CreativeQuoteForm() {
           <div className="relative mb-10">
             <div className="h-2 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
               <motion.div
-                className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
+                className="h-full bg-blue-500 rounded-full"
                 initial={{ width: "0%" }}
                 animate={{ width: `${(step / 3) * 100}%` }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -360,7 +360,7 @@ export default function CreativeQuoteForm() {
                     className={cn(
                       "w-12 h-12 rounded-full flex items-center justify-center text-sm font-medium transition-colors z-10",
                       step >= i
-                        ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white"
+                        ? "bg-blue-500 text-white"
                         : "bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400",
                     )}
                     whileHover={{ scale: 1.1 }}
@@ -443,7 +443,7 @@ export default function CreativeQuoteForm() {
                         <motion.div
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: "auto" }}
-                          className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 p-4 rounded-lg shadow-sm border border-blue-100 dark:border-blue-800/30"
+                          className="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg shadow-sm border border-blue-100 dark:border-blue-800/30"
                         >
                           <div className="flex items-center mb-2">
                             <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center mr-2">
@@ -506,7 +506,7 @@ export default function CreativeQuoteForm() {
                         <motion.div
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: "auto" }}
-                          className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 p-4 rounded-lg shadow-sm border border-blue-100 dark:border-blue-800/30"
+                          className="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg shadow-sm border border-blue-100 dark:border-blue-800/30"
                         >
                           <div className="flex items-center mb-2">
                             <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center mr-2">
@@ -545,8 +545,8 @@ export default function CreativeQuoteForm() {
                   className="space-y-6"
                 >
                   <div className="flex items-center space-x-3 mb-6">
-                    <div className="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
-                      <Calendar className="h-5 w-5 text-purple-600 dark:text-purple-300" />
+                    <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+                      <Calendar className="h-5 w-5 text-blue-600 dark:text-blue-300" />
                     </div>
                     <h3 className="text-xl font-semibold">When and what are you moving?</h3>
                   </div>
@@ -611,12 +611,12 @@ export default function CreativeQuoteForm() {
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="mt-6 p-5 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl"
+                        className="mt-6 p-5 bg-blue-50 dark:bg-blue-900/20 rounded-xl"
                       >
-                        <h4 className="text-base font-semibold mb-4 border-b border-purple-100 dark:border-purple-800/30 pb-2">Your Moving Details</h4>
+                        <h4 className="text-base font-semibold mb-4 border-b border-blue-100 dark:border-blue-800/30 pb-2">Your Moving Details</h4>
                         <div className="space-y-4">
                           <div className="bg-white/70 dark:bg-gray-800/30 p-3 rounded-lg">
-                            <p className="text-sm font-medium text-purple-600 dark:text-purple-300 mb-1">Pickup Date</p>
+                            <p className="text-sm font-medium text-blue-600 dark:text-blue-300 mb-1">Pickup Date</p>
                             <p className="text-base font-bold">
                               {new Date(formData.movingDate).toLocaleDateString("en-US", {
                                 weekday: "long",
@@ -628,7 +628,7 @@ export default function CreativeQuoteForm() {
                           </div>
                           
                           <div className="bg-white/70 dark:bg-gray-800/30 p-3 rounded-lg">
-                            <p className="text-sm font-medium text-purple-600 dark:text-purple-300 mb-1">Delivery Date</p>
+                            <p className="text-sm font-medium text-blue-600 dark:text-blue-300 mb-1">Delivery Date</p>
                             <p className="text-base font-bold">
                               {new Date(formData.deliveryDate).toLocaleDateString("en-US", {
                                 weekday: "long",
@@ -640,7 +640,7 @@ export default function CreativeQuoteForm() {
                           </div>
                           
                           <div className="bg-white/70 dark:bg-gray-800/30 p-3 rounded-lg">
-                            <p className="text-sm font-medium text-purple-600 dark:text-purple-300 mb-1">Move Size</p>
+                            <p className="text-sm font-medium text-blue-600 dark:text-blue-300 mb-1">Move Size</p>
                             <p className="text-base font-bold">
                               {formData.moveSize === "studio" ? "Studio" :
                                formData.moveSize === "1bedroom" ? "1 Bedroom" :
@@ -670,8 +670,8 @@ export default function CreativeQuoteForm() {
                   className="space-y-6"
                 >
                   <div className="flex items-center space-x-3 mb-6">
-                    <div className="w-10 h-10 rounded-full bg-pink-100 dark:bg-pink-900 flex items-center justify-center">
-                      <User className="h-5 w-5 text-pink-600 dark:text-pink-300" />
+                    <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+                      <User className="h-5 w-5 text-blue-600 dark:text-blue-300" />
                     </div>
                     <h3 className="text-xl font-semibold">Your Contact Information</h3>
                   </div>
@@ -725,7 +725,7 @@ export default function CreativeQuoteForm() {
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="mt-6 p-4 bg-gradient-to-r from-pink-50 to-blue-50 dark:from-pink-900/20 dark:to-blue-900/20 rounded-xl"
+                    className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl"
                   >
                     <div className="flex items-center space-x-3 mb-2">
                       <Check className="h-5 w-5 text-green-500" />
@@ -760,7 +760,7 @@ export default function CreativeQuoteForm() {
                   type="button"
                   onClick={nextStep}
                   disabled={!isStepComplete(step)}
-                  className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
+                  className="flex items-center space-x-2 bg-blue-500 hover:bg-blue-600"
                   size="lg"
                 >
                   Continue
@@ -770,7 +770,7 @@ export default function CreativeQuoteForm() {
                 <Button
                   type="submit"
                   disabled={isSubmitting || !isStepComplete(step)}
-                  className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
+                  className="flex items-center space-x-2 bg-blue-500 hover:bg-blue-600"
                   size="lg"
                 >
                   {isSubmitting ? (

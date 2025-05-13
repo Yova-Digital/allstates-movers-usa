@@ -71,7 +71,7 @@ export default function ZipCodeInput({
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
-          className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 p-4 rounded-lg shadow-sm border border-blue-100 dark:border-blue-800/30"
+          className="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg shadow-sm border border-blue-100 dark:border-blue-800/30"
         >
           <div className="flex items-center mb-2">
             <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center mr-2">

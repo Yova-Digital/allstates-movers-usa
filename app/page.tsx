@@ -38,7 +38,7 @@ export default function Home() {
 
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6">
                 Moving Your Home{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+                <span className="text-blue-500">
                   With Excellence
                 </span>{" "}
                 Across America

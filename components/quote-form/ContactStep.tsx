@@ -22,8 +22,8 @@ export default function ContactStep({ formData, updateFormData }: ContactStepPro
       className="space-y-6"
     >
       <div className="flex items-center space-x-3 mb-6">
-        <div className="w-10 h-10 rounded-full bg-pink-100 dark:bg-pink-900 flex items-center justify-center">
-          <User className="h-5 w-5 text-pink-600 dark:text-pink-300" />
+        <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+          <User className="h-5 w-5 text-blue-600 dark:text-blue-300" />
         </div>
         <h3 className="text-xl font-semibold">Your Contact Information</h3>
       </div>
@@ -77,7 +77,7 @@ export default function ContactStep({ formData, updateFormData }: ContactStepPro
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="mt-6 p-4 bg-gradient-to-r from-pink-50 to-blue-50 dark:from-pink-900/20 dark:to-blue-900/20 rounded-xl"
+        className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl"
       >
         <div className="flex items-center space-x-3 mb-2">
           <Check className="h-5 w-5 text-green-500" />

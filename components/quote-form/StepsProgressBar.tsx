@@ -14,7 +14,7 @@ export default function StepsProgressBar({ step, setStep }: StepsProgressBarProp
     <div className="relative mb-10">
       <div className="h-2 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
         <motion.div
-          className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
+          className="h-full bg-blue-500 rounded-full"
           initial={{ width: "0%" }}
           animate={{ width: `${(step / 3) * 100}%` }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -28,7 +28,7 @@ export default function StepsProgressBar({ step, setStep }: StepsProgressBarProp
               className={cn(
                 "w-12 h-12 rounded-full flex items-center justify-center text-sm font-medium transition-colors z-10",
                 step >= i
-                  ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white"
+                  ? "bg-blue-500 text-white"
                   : "bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400",
               )}
               whileHover={{ scale: 1.1 }}

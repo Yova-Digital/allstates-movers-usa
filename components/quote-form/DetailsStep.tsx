@@ -46,8 +46,8 @@ export default function DetailsStep({ formData, updateFormData }: DetailsStepPro
       className="space-y-6"
     >
       <div className="flex items-center space-x-3 mb-6">
-        <div className="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
-          <Calendar className="h-5 w-5 text-purple-600 dark:text-purple-300" />
+        <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+          <Calendar className="h-5 w-5 text-blue-600 dark:text-blue-300" />
         </div>
         <h3 className="text-xl font-semibold">When and what are you moving?</h3>
       </div>
@@ -111,26 +111,26 @@ export default function DetailsStep({ formData, updateFormData }: DetailsStepPro
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-6 p-5 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl"
+          className="mt-6 p-5 bg-blue-50 dark:bg-blue-900/20 rounded-xl"
         >
-          <h4 className="text-base font-semibold mb-4 border-b border-purple-100 dark:border-purple-800/30 pb-2">Your Moving Details</h4>
+          <h4 className="text-base font-semibold mb-4 border-b border-blue-100 dark:border-blue-800/30 pb-2">Your Moving Details</h4>
           <div className="space-y-4">
             <div className="bg-white/70 dark:bg-gray-800/30 p-3 rounded-lg">
-              <p className="text-sm font-medium text-purple-600 dark:text-purple-300 mb-1">Pickup Date</p>
+              <p className="text-sm font-medium text-blue-600 dark:text-blue-300 mb-1">Pickup Date</p>
               <p className="text-base font-bold">
                 {formatDate(formData.movingDate)}
               </p>
             </div>
             
             <div className="bg-white/70 dark:bg-gray-800/30 p-3 rounded-lg">
-              <p className="text-sm font-medium text-purple-600 dark:text-purple-300 mb-1">Delivery Date</p>
+              <p className="text-sm font-medium text-blue-600 dark:text-blue-300 mb-1">Delivery Date</p>
               <p className="text-base font-bold">
                 {formatDate(formData.deliveryDate)}
               </p>
             </div>
             
             <div className="bg-white/70 dark:bg-gray-800/30 p-3 rounded-lg">
-              <p className="text-sm font-medium text-purple-600 dark:text-purple-300 mb-1">Move Size</p>
+              <p className="text-sm font-medium text-blue-600 dark:text-blue-300 mb-1">Move Size</p>
               <p className="text-base font-bold">
                 {getMoveSize(formData.moveSize)}
               </p>
