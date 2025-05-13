@@ -86,15 +86,15 @@ export default function NavBar() {
       </div>
 
       {isOpen && (
-        <div className="md:hidden bg-white dark:bg-gray-950 shadow-lg">
-          <nav className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <ul className="space-y-1">
+        <div className="md:hidden backdrop-blur-md bg-gray-950/70 shadow-lg border-t border-gray-200/20 border-gray-800/20 text-white">
+          <nav className="px-4 pt-3 pb-4 space-y-1">
+            <ul className="space-y-2">
 
               {headerLinks.map((link) => (
                 <li key={link.title}>
                   <Link
                     href={link.href}
-                    className="block px-3 py-2 text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md w-full text-left"
+                    className="block px-4 py-3 text-base font-medium hover:bg-gray-800/50 rounded-xl w-full text-left transition-all duration-200 border border-transparent hover:border-gray-700/50"
                   >
                     {link.title}
                   </Link>
