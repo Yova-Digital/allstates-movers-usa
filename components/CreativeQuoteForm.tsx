@@ -526,50 +526,99 @@ export default function CreativeQuoteForm() {
                           <SelectValue placeholder="Select move size" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="studio">Studio (350-450 sq ft)</SelectItem>
-                          <SelectItem value="1bedroom">1 Bedroom (500-700 sq ft)</SelectItem>
-                          <SelectItem value="2bedroom">2 Bedroom (700-1000 sq ft)</SelectItem>
-                          <SelectItem value="3bedroom">3 Bedroom (1000-1500 sq ft)</SelectItem>
-                          <SelectItem value="4bedroom">4+ Bedroom (1500+ sq ft)</SelectItem>
-                          <SelectItem value="office_small">Small Office (up to 3000 sq ft)</SelectItem>
-                          <SelectItem value="office_large">Large Office (3000+ sq ft)</SelectItem>
+                          <SelectItem value="studio">Studio</SelectItem>
+                          <SelectItem value="1bedroom">1 Bedroom</SelectItem>
+                          <SelectItem value="2bedroom">2 Bedroom</SelectItem>
+                          <SelectItem value="3bedroom">3 Bedroom</SelectItem>
+                          <SelectItem value="4bedroom">4+ Bedroom</SelectItem>
+                          <SelectItem value="office_small">Small Office</SelectItem>
+                          <SelectItem value="office_large">Large Office</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                   </div>
 
                   {formData.movingDate && formData.moveSize && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-6 p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl"
-                    >
-                      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                        <div>
-                          <p className="text-sm font-medium">Selected Date</p>
-                          <p className="text-lg font-bold">
-                            {new Date(formData.movingDate).toLocaleDateString("en-US", {
-                              weekday: "long",
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            })}
+                    <>
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mt-6 p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl"
+                      >
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                          <div>
+                            <p className="text-sm font-medium">Selected Date</p>
+                            <p className="text-lg font-bold">
+                              {new Date(formData.movingDate).toLocaleDateString("en-US", {
+                                weekday: "long",
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              })}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium">Selected Size</p>
+                            <p className="text-lg font-bold">
+                              {formData.moveSize === "studio" ? "Studio" :
+                               formData.moveSize === "1bedroom" ? "1 Bedroom" :
+                               formData.moveSize === "2bedroom" ? "2 Bedroom" :
+                               formData.moveSize === "3bedroom" ? "3 Bedroom" :
+                               formData.moveSize === "4bedroom" ? "4+ Bedroom" :
+                               formData.moveSize === "office_small" ? "Small Office" :
+                               "Large Office"}
+                            </p>
+                          </div>
+                        </div>
+                      </motion.div>
+                      
+                      {/* Express Delivery Options */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="mt-6 p-5 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-100 dark:border-blue-800/30"
+                      >
+                        <div className="space-y-4">
+                          <div className="flex items-center">
+                            <div className="shrink-0 bg-blue-100 dark:bg-blue-800/50 p-2 rounded-full mr-3">
+                              <Truck className="h-5 w-5 text-blue-600 dark:text-blue-300" />
+                            </div>
+                            <div>
+                              <h3 className="font-bold text-lg bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Express Delivery Options</h3>
+                              <p className="text-sm text-gray-600 dark:text-gray-300">Need it fast? We've got you covered.</p>
+                            </div>
+                          </div>
+                          
+                          <p className="text-sm text-gray-600 dark:text-gray-300">
+                            US50 Transport offers reliable express services for urgent moves and time-sensitive shipments.
+                          </p>
+                          
+                          <div className="bg-white/70 dark:bg-gray-800/30 rounded-lg p-3">
+                            <p className="font-medium text-sm mb-2">Choose from:</p>
+                            <ul className="space-y-1 text-sm pl-5 list-disc text-gray-600 dark:text-gray-300">
+                              <li>Same-Day Delivery (local moves only)</li>
+                              <li>Next-Day Delivery (up to 500 miles)</li>
+                              <li>Priority Express Service (coast-to-coast within 2–3 days)</li>
+                            </ul>
+                          </div>
+                          
+                          <div className="bg-white/70 dark:bg-gray-800/30 rounded-lg p-3">
+                            <p className="font-medium text-sm mb-2">Why choose Express?</p>
+                            <ul className="space-y-1 text-sm pl-5 list-disc text-gray-600 dark:text-gray-300">
+                              <li>Guaranteed delivery windows</li>
+                              <li>Real-time tracking</li>
+                              <li>Dedicated express support team</li>
+                            </ul>
+                          </div>
+                          
+                          <p className="text-xs text-gray-500 dark:text-gray-400 italic">
+                            Note: Express delivery options will be discussed after quote submission based on availability and your specific requirements.
                           </p>
                         </div>
-                        <div>
-                          <p className="text-sm font-medium">Selected Size</p>
-                          <p className="text-lg font-bold">
-                            {formData.moveSize === "studio" ? "Studio" :
-                             formData.moveSize === "1bedroom" ? "1 Bedroom" :
-                             formData.moveSize === "2bedroom" ? "2 Bedroom" :
-                             formData.moveSize === "3bedroom" ? "3 Bedroom" :
-                             formData.moveSize === "4bedroom" ? "4+ Bedroom" :
-                             formData.moveSize === "office_small" ? "Small Office" :
-                             "Large Office"}
-                          </p>
-                        </div>
-                      </div>
-                    </motion.div>
+                      </motion.div>
+                    </>
                   )}
                 </motion.div>
               )}
