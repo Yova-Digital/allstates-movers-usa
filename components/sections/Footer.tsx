@@ -131,17 +131,6 @@ export default function Footer() {
             <p className="text-gray-400 text-sm mb-4 md:mb-0">
               &copy; {new Date().getFullYear()} US50 Transport LLC. All rights reserved.
             </p>
-            <div className="flex space-x-6">
-              <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">
-                Privacy Policy
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">
-                Terms of Service
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">
-                Sitemap
-              </a>
-            </div>
           </div>
         </div>
       </div>
