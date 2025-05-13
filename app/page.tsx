@@ -29,7 +29,7 @@ export default function Home() {
             <div className="text-white">
               <div className="flex space-x-4 mb-6">
                 <div className="border border-white/20 bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-sm">
-                  USDOT4378213
+                  USDOT 4378213
                 </div>
                 <div className="border border-white/20 bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-sm">
                   MC-1715829
