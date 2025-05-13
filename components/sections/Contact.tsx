@@ -147,7 +147,7 @@ export default function Contact() {
                   <div>
                     <h4 className="font-medium text-lg">Headquarters</h4>
                     <p className="text-gray-600 dark:text-gray-400">
-                      Erie pa
+                      All over the us
                     </p>
                   </div>
                 </div>
@@ -159,7 +159,7 @@ export default function Contact() {
                   <div>
                     <h4 className="font-medium text-lg">Phone</h4>
                     <p className="text-gray-600 dark:text-gray-400">
-                      (814) 431-3470
+                      (475) 414-5317
                     </p>
                   </div>
                 </div>

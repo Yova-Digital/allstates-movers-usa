@@ -112,11 +112,11 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-start">
                 <span className="text-primary mr-2">Address:</span>
-                <span className="text-gray-400">Erie pa</span>
+                <span className="text-gray-400">All over the us</span>
               </li>
               <li className="flex items-start">
                 <span className="text-primary mr-2">Phone:</span>
-                <span className="text-gray-400">(814) 431-3470</span>
+                <span className="text-gray-400">(475) 414-5317</span>
               </li>
               <li className="flex items-start">
                 <span className="text-primary mr-2">Email:</span>

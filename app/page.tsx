@@ -37,16 +37,15 @@ export default function Home() {
               </div>
 
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6">
-                Moving Your Furniture{" "}
+                Moving Your Home{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
-                  With Care
+                  With Excellence
                 </span>{" "}
                 Across America
               </h1>
 
               <p className="text-lg md:text-xl text-white/80 mb-8 max-w-xl">
-                Premium furniture moving services with white-glove handling and nationwide coverage. Your possessions
-                deserve the best.
+                Premium household goods moving service with exceptional care and nationwide coverage. From delicate heirlooms to everyday essentials, we transport your life's treasures safely to your new beginning.
               </p>
             </div>
 

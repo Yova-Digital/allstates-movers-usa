@@ -6,8 +6,32 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 const faqs = [
   {
     question: "How far in advance should I book my move?",
-    answer:
-      "We recommend booking your move at least 4-6 weeks in advance, especially during peak moving season (May-September). For last-minute moves, please contact us directly to check availability.",
+    answer: (
+      <div className="space-y-3">
+        <h3 className="font-bold text-blue-600 text-xl mb-2">Express Delivery Options</h3>
+        
+        <p>Need it fast? We've got you covered.</p>
+        <p>US50 Transport offers reliable express services for urgent moves and time-sensitive shipments.</p>
+        
+        <div>
+          <p className="font-medium">Choose from:</p>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>Same-Day Delivery (local moves only)</li>
+            <li>Next-Day Delivery (up to 500 miles)</li>
+            <li>Priority Express Service (coast-to-coast within 2–3 days)</li>
+          </ul>
+        </div>
+        
+        <div>
+          <p className="font-medium">Why choose Express?</p>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>Guaranteed delivery windows</li>
+            <li>Real-time tracking</li>
+            <li>Dedicated express support team</li>
+          </ul>
+        </div>
+      </div>
+    ),
   },
   {
     question: "Do you provide packing services?",

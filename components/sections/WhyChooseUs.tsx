@@ -8,32 +8,32 @@ const features = [
   {
     icon: Shield,
     title: "Fully Insured",
-    description: "Your furniture is protected with comprehensive insurance coverage",
+    description: "All your household goods are protected with comprehensive insurance coverage",
   },
   {
     icon: Clock,
     title: "On-Time Service",
-    description: "We value your time with punctual pickups and deliveries",
+    description: "We value your time with punctual pickups and deliveries across the country",
   },
   {
     icon: Award,
     title: "Experienced Team",
-    description: "Our movers have years of professional furniture handling experience",
+    description: "Our movers have years of expertise in handling all types of household goods safely",
   },
   {
     icon: Truck,
     title: "Nationwide Coverage",
-    description: "We service all 50 states with our premium moving solutions",
+    description: "We service all 50 states with our premium moving solutions for any distance",
   },
   {
     icon: DollarSign,
     title: "Transparent Pricing",
-    description: "No hidden fees or surprise charges, just honest pricing",
+    description: "No hidden fees or surprise charges, just honest pricing for your peace of mind",
   },
   {
     icon: HeartHandshake,
     title: "White Glove Service",
-    description: "Premium handling for your most valuable possessions",
+    description: "Premium handling for everything from everyday items to precious heirlooms",
   },
 ]
 
@@ -50,7 +50,7 @@ export default function WhyChooseUs() {
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Choose US50 Transport</h2>
           <p className="text-lg text-gray-600 dark:text-gray-400">
-            We've built our reputation on reliability, professionalism, and exceptional service
+            We've built our reputation on reliability, professionalism, and exceptional care for all your household belongings
           </p>
         </motion.div>
 
