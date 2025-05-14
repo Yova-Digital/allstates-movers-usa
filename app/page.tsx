@@ -40,7 +40,7 @@ export default function Home() {
                 Moving Your Home{" "}
                 <span className="text-blue-500">
                   With Excellence
-                </span>{" "}
+                </span>
                 Across America
               </h1>
 

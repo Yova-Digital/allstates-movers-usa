@@ -3,40 +3,19 @@
 import type React from "react"
 
 import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Truck, Calendar, User, MapPin, ArrowRight, ArrowLeft, Check, Loader2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { cn } from "@/lib/utils"
+import { AnimatePresence } from "framer-motion"
 import { useToast } from "@/hooks/use-toast"
 
-// Sample ZIP code coordinates database (longitude, latitude)
-const zipCoordinates: Record<string, [number, number]> = {
-  "10001": [-73.9964, 40.7509], // New York
-  "90210": [-118.4004, 34.0901], // Beverly Hills
-  "60601": [-87.6249, 41.8856], // Chicago
-  "75001": [-96.8373, 32.9795], // Dallas
-  "33101": [-80.1937, 25.7743], // Miami
-  "02108": [-71.0637, 42.3590], // Boston
-  "98101": [-122.3321, 47.6101], // Seattle
-  "94102": [-122.4194, 37.7749], // San Francisco
-  "80201": [-104.9903, 39.7392], // Denver
-  "70112": [-90.0715, 29.9511], // New Orleans
-  "19102": [-75.1624, 39.9526], // Philadelphia
-  "20001": [-77.0162, 38.9041], // Washington DC
-  "30301": [-84.3877, 33.7488], // Atlanta
-  "37201": [-86.7833, 36.1622], // Nashville
-  "77001": [-95.3621, 29.7604], // Houston
-}
+// Import modular components
+import StepsProgressBar from "./quote-form/StepsProgressBar"
+import LocationStep from "./quote-form/LocationStep"
+import DetailsStep from "./quote-form/DetailsStep"
+import ContactStep from "./quote-form/ContactStep"
+import FormNavigation from "./quote-form/FormNavigation"
+import { FormData, Address } from "./quote-form/types"
 
-interface Address {
-  street: string
-  city: string
-  state: string
-  zipCode: string
-}
+// Import ZIP code service functions
+import { zipCoordinates, getZipCodeCity, getZipCodeState } from "./quote-form/zipCodeService"
 
 export default function CreativeQuoteForm() {
   const [step, setStep] = useState(1)
@@ -73,17 +52,21 @@ export default function CreativeQuoteForm() {
     }
 
     try {
-      const apiKey = "d2c3aa30-2fb0-11f0-895b-85719009b69c";
-      
-      const response = await fetch(
-        `https://app.zipcodebase.com/api/v1/search?apikey=${apiKey}&codes=${zipCode}&country=us`
-      );
+      const response = await fetch(`https://api.zippopotam.us/us/${zipCode}`);
       const data = await response.json();
 
-      if (data.results && data.results[zipCode] && data.results[zipCode].length > 0) {
-        const locationData = data.results[zipCode][0];
-        const city = locationData.city || "";
-        const state = locationData.state || "";
+      // Verify the response is from the United States
+      if (data && 
+          data.country === "United States" && 
+          data["country abbreviation"] === "US" && 
+          data.places && 
+          data.places.length > 0) {
+        const locationData = data.places[0];
+        const placeName = locationData["place name"] || "";
+        const stateAbbr = locationData["state abbreviation"] || "";
+        const fullState = locationData["state"] || "";
+        const city = placeName;
+        const state = fullState ? `${fullState} (${stateAbbr})` : stateAbbr;
         
         const streetNames = [
           "Main St", "Oak St", "Maple Ave", "Washington St", "Park Ave",
@@ -168,165 +151,68 @@ export default function CreativeQuoteForm() {
       }
     }
   }
-  
-  const getZipCodeCity = (zipCode: string): string => {
-    const cities: Record<string, string> = {
-      "10001": "New York",
-      "90210": "Beverly Hills",
-      "60601": "Chicago",
-      "75001": "Dallas",
-      "33101": "Miami",
-      "02108": "Boston",
-      "98101": "Seattle",
-      "94102": "San Francisco",
-      "80201": "Denver",
-      "70112": "New Orleans",
-      "19102": "Philadelphia",
-      "20001": "Washington DC",
-      "30301": "Atlanta",
-      "37201": "Nashville",
-      "77001": "Houston",
-    };
-    return cities[zipCode] || "Unknown City";
-  }
-  
-  const getZipCodeState = (zipCode: string): string => {
-    const states: Record<string, string> = {
-      "10001": "NY",
-      "90210": "CA",
-      "60601": "IL",
-      "75001": "TX",
-      "33101": "FL",
-      "02108": "MA",
-      "98101": "WA",
-      "94102": "CA",
-      "80201": "CO",
-      "70112": "LA",
-      "19102": "PA",
-      "20001": "DC",
-      "30301": "GA",
-      "37201": "TN",
-      "77001": "TX",
-    };
-    return states[zipCode] || "US";
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    try {
+      // Import the API service dynamically to avoid server-side issues
+      const { submitQuoteRequest } = await import("@/services/api");
+      
+      // Submit the form data to the backend API
+      await submitQuoteRequest(formData);
+      
+      // Success
+      toast({
+        title: "Quote request submitted!",
+        description: "We'll get back to you with a detailed quote within 24 hours.",
+      })
 
-    // Success
-    toast({
-      title: "Quote request submitted!",
-      description: "We'll get back to you with a detailed quote within 24 hours.",
-    })
-
-    setIsSubmitting(false)
-    // Reset form
-    setFormData({
-      fromZip: "",
-      toZip: "",
-      fromAddress: {} as Address,
-      toAddress: {} as Address,
-      movingDate: "",
-      deliveryDate: "",
-      moveSize: "",
-      fullName: "",
-      email: "",
-      phone: "",
-    })
-    setStep(1)
-  }
-
-  // Calculate distance between two ZIP codes
-  const calculateDistance = (fromZip: string, toZip: string): number => {
-    // If the same ZIP code, distance is 0
-    if (fromZip === toZip) return 0;
-    
-    // If either ZIP code is missing or invalid, use a fallback distance
-    if (!fromZip || !toZip || fromZip.length !== 5 || toZip.length !== 5) {
-      return 500; // Default fallback distance
+      // Reset form
+      setFormData({
+        fromZip: "",
+        toZip: "",
+        fromAddress: {} as Address,
+        toAddress: {} as Address,
+        movingDate: "",
+        deliveryDate: "",
+        moveSize: "",
+        fullName: "",
+        email: "",
+        phone: "",
+      })
+      setStep(1)
+    } catch (error) {
+      // Handle error
+      toast({
+        title: "Submission failed",
+        description: "There was a problem submitting your quote request. Please try again.",
+        variant: "destructive",
+      })
+      console.error("Error submitting form:", error);
+    } finally {
+      setIsSubmitting(false)
     }
-    
-    // For well-known ZIP code pairs, use pre-calculated distances (optional enhancement)
-    const knownDistances: Record<string, number> = {
-      // New York to Los Angeles
-      "10001-90210": 2445,
-      "90210-10001": 2445,
-      // Chicago to Miami
-      "60601-33101": 1192,
-      "33101-60601": 1192,
-      // San Francisco to New York
-      "94102-10001": 2578,
-      "10001-94102": 2578,
-    };
-    
-    // Check if we have a pre-calculated distance for this pair
-    const pairKey = `${fromZip}-${toZip}`;
-    if (knownDistances[pairKey]) {
-      return knownDistances[pairKey];
-    }
-    
-    // Otherwise calculate with Haversine formula
-    // Default coordinates for unknown ZIP codes (US center)
-    const defaultCoord: [number, number] = [-95.7129, 37.0902];
-    
-    // Get coordinates
-    const fromCoord = zipCoordinates[fromZip] || defaultCoord;
-    const toCoord = zipCoordinates[toZip] || defaultCoord;
-    
-    // If both ZIP codes use the default coordinate, we need a better estimate
-    if (!zipCoordinates[fromZip] && !zipCoordinates[toZip]) {
-      // Calculate a more realistic distance based on ZIP code numerical difference
-      // (This is not accurate but better than returning 0)
-      const zipDifference = Math.abs(parseInt(fromZip) - parseInt(toZip));
-      return Math.min(Math.max(Math.round(zipDifference / 20), 50), 2500);
-    }
-    
-    // Haversine formula to calculate distance between two points on Earth
-    const R = 3958.8; // Earth's radius in miles
-    const dLat = (toCoord[1] - fromCoord[1]) * Math.PI / 180;
-    const dLon = (toCoord[0] - fromCoord[0]) * Math.PI / 180;
-    const a = 
-      Math.sin(dLat/2) * Math.sin(dLat/2) +
-      Math.cos(fromCoord[1] * Math.PI / 180) * Math.cos(toCoord[1] * Math.PI / 180) * 
-      Math.sin(dLon/2) * Math.sin(dLon/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    const distance = R * c;
-    
-    // Return rounded distance
-    return Math.round(distance);
-  }
-  
-  // Calculate estimated moving time based on distance
-  const calculateMovingTime = (distance: number): string => {
-    if (distance < 50) return "Same day"
-    if (distance < 300) return "1-2 days"
-    if (distance < 1000) return "2-3 days"
-    if (distance < 2000) return "3-5 days"
-    return "5-7 days"
   }
 
   const nextStep = () => setStep((prev) => Math.min(prev + 1, 3))
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1))
 
-  const isStepComplete = (stepIndex: number) => {
+  const isStepComplete = (stepIndex: number): boolean => {
     if (stepIndex === 1) {
       return (
         formData.fromZip.length === 5 &&
         formData.toZip.length === 5 &&
-        formData.fromAddress.city &&
-        formData.toAddress.city &&
+        !!formData.fromAddress.city &&
+        !!formData.toAddress.city &&
         !invalidFromZip &&
         !invalidToZip
       )
     } else if (stepIndex === 2) {
-      return formData.movingDate && formData.deliveryDate && formData.moveSize
+      return !!formData.movingDate && !!formData.deliveryDate && !!formData.moveSize
     } else if (stepIndex === 3) {
-      return formData.fullName && formData.email && formData.phone
+      return !!formData.fullName && !!formData.email && !!formData.phone
     }
     return false
   }
@@ -342,451 +228,45 @@ export default function CreativeQuoteForm() {
             </p>
           </div>
 
-          {/* Animated Progress Bar */}
-          <div className="relative mb-10">
-            <div className="h-2 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-              <motion.div
-                className="h-full bg-blue-500 rounded-full"
-                initial={{ width: "0%" }}
-                animate={{ width: `${(step / 3) * 100}%` }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
-              />
-            </div>
-
-            <div className="flex justify-between mt-4">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="flex flex-col items-center relative">
-                  <motion.div
-                    className={cn(
-                      "w-12 h-12 rounded-full flex items-center justify-center text-sm font-medium transition-colors z-10",
-                      step >= i
-                        ? "bg-blue-500 text-white"
-                        : "bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400",
-                    )}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => i < step && setStep(i)}
-                  >
-                    {step > i ? (
-                      <Check className="h-6 w-6" />
-                    ) : i === 1 ? (
-                      <MapPin className="h-6 w-6" />
-                    ) : i === 2 ? (
-                      <Calendar className="h-6 w-6" />
-                    ) : (
-                      <User className="h-6 w-6" />
-                    )}
-                  </motion.div>
-                  <span className="text-sm mt-2 font-medium">
-                    {i === 1 ? "Location" : i === 2 ? "Details" : "Contact"}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* Progress Bar */}
+          <StepsProgressBar step={step} setStep={setStep} />
 
           <form onSubmit={handleSubmit}>
             <AnimatePresence mode="wait">
               {step === 1 && (
-                <motion.div
-                  key="step1"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                  className="space-y-6"
-                >
-                  <div className="flex items-center space-x-3 mb-6">
-                    <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-                      <Truck className="h-5 w-5 text-blue-600 dark:text-blue-300" />
-                    </div>
-                    <h3 className="text-xl font-semibold">Where are you moving?</h3>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-4">
-                      <Label htmlFor="fromZip" className="text-base">
-                        Moving From (Zip Code)
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          id="fromZip"
-                          placeholder="Enter zip code"
-                          value={formData.fromZip}
-                          onChange={(e) => {
-                            const zip = e.target.value.replace(/\D/g, "").slice(0, 5)
-                            updateFormData("fromZip", zip)
-                            if (zip.length === 5) lookupAddress(zip, "from")
-                          }}
-                          className={`pr-10 ${invalidFromZip ? 'border-red-500 bg-red-50 dark:bg-red-900/20' : ''}`}
-                          maxLength={5}
-                        />
-                        {lookingUpFrom && (
-                          <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                            <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
-                          </div>
-                        )}
-                      </div>
-
-                      {invalidFromZip ? (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          className="bg-red-50 dark:bg-red-900/30 p-3 rounded-lg"
-                        >
-                          <p className="text-sm font-medium text-red-600 dark:text-red-400">Invalid ZIP Code:</p>
-                          <p className="text-sm text-red-600 dark:text-red-400">
-                            The ZIP code you entered doesn't appear to be valid. Please enter a valid ZIP code.
-                          </p>
-                        </motion.div>
-                      ) : formData.fromAddress.city && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          className="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg shadow-sm border border-blue-100 dark:border-blue-800/30"
-                        >
-                          <div className="flex items-center mb-2">
-                            <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center mr-2">
-                              <MapPin className="h-3 w-3 text-white" />
-                            </div>
-                            <p className="text-sm font-semibold text-blue-700 dark:text-blue-300">Location Found</p>
-                          </div>
-                          <div className="ml-7 text-sm">
-                            <div className="space-y-2">
-                              <div className="flex items-center">
-                                <span className="font-medium text-gray-700 dark:text-gray-300 w-16">City:</span>
-                                <span className="text-gray-800 dark:text-gray-200 font-semibold">{formData.fromAddress.city}</span>
-                              </div>
-                              <div className="flex items-center">
-                                <span className="font-medium text-gray-700 dark:text-gray-300 w-16">State:</span>
-                                <span className="text-gray-800 dark:text-gray-200 font-semibold">{formData.fromAddress.state}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </motion.div>
-                      )}
-                    </div>
-
-                    <div className="space-y-4">
-                      <Label htmlFor="toZip" className="text-base">
-                        Moving To (Zip Code)
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          id="toZip"
-                          placeholder="Enter zip code"
-                          value={formData.toZip}
-                          onChange={(e) => {
-                            const zip = e.target.value.replace(/\D/g, "").slice(0, 5)
-                            updateFormData("toZip", zip)
-                            if (zip.length === 5) lookupAddress(zip, "to")
-                          }}
-                          className={`pr-10 ${invalidToZip ? 'border-red-500 bg-red-50 dark:bg-red-900/20' : ''}`}
-                          maxLength={5}
-                        />
-                        {lookingUpTo && (
-                          <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                            <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
-                          </div>
-                        )}
-                      </div>
-
-                      {invalidToZip ? (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          className="bg-red-50 dark:bg-red-900/30 p-3 rounded-lg"
-                        >
-                          <p className="text-sm font-medium text-red-600 dark:text-red-400">Invalid ZIP Code:</p>
-                          <p className="text-sm text-red-600 dark:text-red-400">
-                            The ZIP code you entered doesn't appear to be valid. Please enter a valid ZIP code.
-                          </p>
-                        </motion.div>
-                      ) : formData.toAddress.city && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          className="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg shadow-sm border border-blue-100 dark:border-blue-800/30"
-                        >
-                          <div className="flex items-center mb-2">
-                            <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center mr-2">
-                              <MapPin className="h-3 w-3 text-white" />
-                            </div>
-                            <p className="text-sm font-semibold text-blue-700 dark:text-blue-300">Location Found</p>
-                          </div>
-                          <div className="ml-7 text-sm">
-                            <div className="space-y-2">
-                              <div className="flex items-center">
-                                <span className="font-medium text-gray-700 dark:text-gray-300 w-16">City:</span>
-                                <span className="text-gray-800 dark:text-gray-200 font-semibold">{formData.toAddress.city}</span>
-                              </div>
-                              <div className="flex items-center">
-                                <span className="font-medium text-gray-700 dark:text-gray-300 w-16">State:</span>
-                                <span className="text-gray-800 dark:text-gray-200 font-semibold">{formData.toAddress.state}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </motion.div>
-                      )}
-                    </div>
-                  </div>
-
-
-                </motion.div>
+                <LocationStep 
+                  formData={formData}
+                  updateFormData={updateFormData}
+                  lookupAddress={lookupAddress}
+                  invalidFromZip={invalidFromZip}
+                  invalidToZip={invalidToZip}
+                  lookingUpFrom={lookingUpFrom}
+                  lookingUpTo={lookingUpTo}
+                />
               )}
 
               {step === 2 && (
-                <motion.div
-                  key="step2"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                  className="space-y-6"
-                >
-                  <div className="flex items-center space-x-3 mb-6">
-                    <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-                      <Calendar className="h-5 w-5 text-blue-600 dark:text-blue-300" />
-                    </div>
-                    <h3 className="text-xl font-semibold">When and what are you moving?</h3>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-4">
-                      <Label htmlFor="movingDate" className="text-base">
-                        Moving Date
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          id="movingDate"
-                          type="date"
-                          value={formData.movingDate}
-                          onChange={(e) => updateFormData("movingDate", e.target.value)}
-                          min={new Date().toISOString().split("T")[0]}
-                          className="bg-white dark:bg-gray-800"
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-4">
-                      <Label htmlFor="deliveryDate" className="text-base">
-                        When You Need It Delivered
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          id="deliveryDate"
-                          type="date"
-                          value={formData.deliveryDate}
-                          onChange={(e) => updateFormData("deliveryDate", e.target.value)}
-                          min={formData.movingDate || new Date().toISOString().split("T")[0]}
-                          className="bg-white dark:bg-gray-800"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-4">
-                      <Label htmlFor="moveSize" className="text-base">
-                        Move Size
-                      </Label>
-                      <Select value={formData.moveSize} onValueChange={(value) => updateFormData("moveSize", value)}>
-                        <SelectTrigger id="moveSize" className="bg-white dark:bg-gray-800">
-                          <SelectValue placeholder="Select move size" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="studio">Studio</SelectItem>
-                          <SelectItem value="1bedroom">1 Bedroom</SelectItem>
-                          <SelectItem value="2bedroom">2 Bedroom</SelectItem>
-                          <SelectItem value="3bedroom">3 Bedroom</SelectItem>
-                          <SelectItem value="4bedroom">4+ Bedroom</SelectItem>
-                          <SelectItem value="office_small">Small Office</SelectItem>
-                          <SelectItem value="office_large">Large Office</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  {formData.movingDate && formData.moveSize && (
-                    <>
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="mt-6 p-5 bg-blue-50 dark:bg-blue-900/20 rounded-xl"
-                      >
-                        <h4 className="text-base font-semibold mb-4 border-b border-blue-100 dark:border-blue-800/30 pb-2">Your Moving Details</h4>
-                        <div className="space-y-4">
-                          <div className="bg-white/70 dark:bg-gray-800/30 p-3 rounded-lg">
-                            <p className="text-sm font-medium text-blue-600 dark:text-blue-300 mb-1">Pickup Date</p>
-                            <p className="text-base font-bold">
-                              {new Date(formData.movingDate).toLocaleDateString("en-US", {
-                                weekday: "long",
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              })}
-                            </p>
-                          </div>
-                          
-                          <div className="bg-white/70 dark:bg-gray-800/30 p-3 rounded-lg">
-                            <p className="text-sm font-medium text-blue-600 dark:text-blue-300 mb-1">Delivery Date</p>
-                            <p className="text-base font-bold">
-                              {new Date(formData.deliveryDate).toLocaleDateString("en-US", {
-                                weekday: "long",
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              })}
-                            </p>
-                          </div>
-                          
-                          <div className="bg-white/70 dark:bg-gray-800/30 p-3 rounded-lg">
-                            <p className="text-sm font-medium text-blue-600 dark:text-blue-300 mb-1">Move Size</p>
-                            <p className="text-base font-bold">
-                              {formData.moveSize === "studio" ? "Studio" :
-                               formData.moveSize === "1bedroom" ? "1 Bedroom" :
-                               formData.moveSize === "2bedroom" ? "2 Bedroom" :
-                               formData.moveSize === "3bedroom" ? "3 Bedroom" :
-                               formData.moveSize === "4bedroom" ? "4+ Bedroom" :
-                               formData.moveSize === "office_small" ? "Small Office" :
-                               "Large Office"}
-                            </p>
-                          </div>
-                        </div>
-                      </motion.div>
-                      
-
-                    </>
-                  )}
-                </motion.div>
+                <DetailsStep 
+                  formData={formData}
+                  updateFormData={updateFormData}
+                />
               )}
 
               {step === 3 && (
-                <motion.div
-                  key="step3"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                  className="space-y-6"
-                >
-                  <div className="flex items-center space-x-3 mb-6">
-                    <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-                      <User className="h-5 w-5 text-blue-600 dark:text-blue-300" />
-                    </div>
-                    <h3 className="text-xl font-semibold">Your Contact Information</h3>
-                  </div>
-
-                  <div className="space-y-6">
-                    <div>
-                      <Label htmlFor="fullName" className="text-base">
-                        Full Name
-                      </Label>
-                      <Input
-                        id="fullName"
-                        placeholder="Enter your full name"
-                        value={formData.fullName}
-                        onChange={(e) => updateFormData("fullName", e.target.value)}
-                        className="mt-2 bg-white dark:bg-gray-800"
-                      />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="email" className="text-base">
-                        Email Address
-                      </Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="Enter your email address"
-                        value={formData.email}
-                        onChange={(e) => updateFormData("email", e.target.value)}
-                        className="mt-2 bg-white dark:bg-gray-800"
-                      />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="phone" className="text-base">
-                        Phone Number
-                      </Label>
-                      <Input
-                        id="phone"
-                        type="tel"
-                        placeholder="Enter your phone number"
-                        value={formData.phone}
-                        onChange={(e) => {
-                          const phone = e.target.value.replace(/\D/g, "").slice(0, 10)
-                          updateFormData("phone", phone)
-                        }}
-                        className="mt-2 bg-white dark:bg-gray-800"
-                      />
-                    </div>
-                  </div>
-                  
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl"
-                  >
-                    <div className="flex items-center space-x-3 mb-2">
-                      <Check className="h-5 w-5 text-green-500" />
-                      <p className="font-medium">Almost there!</p>
-                    </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 pl-8">
-                      Submit your request to receive a detailed quote from our team. We'll contact you within 24 hours.
-                    </p>
-                  </motion.div>
-                </motion.div>
+                <ContactStep 
+                  formData={formData}
+                  updateFormData={updateFormData}
+                />
               )}
             </AnimatePresence>
 
-            <div className="flex justify-between mt-10">
-              {step > 1 ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={prevStep}
-                  className="flex items-center space-x-2"
-                  size="lg"
-                >
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back
-                </Button>
-              ) : (
-                <div></div>
-              )}
-
-              {step < 3 ? (
-                <Button
-                  type="button"
-                  onClick={nextStep}
-                  disabled={!isStepComplete(step)}
-                  className="flex items-center space-x-2 bg-blue-500 hover:bg-blue-600"
-                  size="lg"
-                >
-                  Continue
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </Button>
-              ) : (
-                <Button
-                  type="submit"
-                  disabled={isSubmitting || !isStepComplete(step)}
-                  className="flex items-center space-x-2 bg-blue-500 hover:bg-blue-600"
-                  size="lg"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Submitting...
-                    </>
-                  ) : (
-                    <>
-                      Get Your Quote
-                      <Check className="h-4 w-4 ml-2" />
-                    </>
-                  )}
-                </Button>
-              )}
-            </div>
+            <FormNavigation 
+              step={step}
+              nextStep={nextStep}
+              prevStep={prevStep}
+              isStepComplete={isStepComplete}
+              isSubmitting={isSubmitting}
+            />
           </form>
         </div>
       </div>
