@@ -4,7 +4,7 @@
  */
 
 // Base URL for API requests
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_BASE_URL = 'https://us50transport.com/api';
 
 /**
  * Submit a quote request to the backend
