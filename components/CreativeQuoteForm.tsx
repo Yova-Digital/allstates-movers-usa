@@ -157,11 +157,21 @@ export default function CreativeQuoteForm() {
     setIsSubmitting(true)
 
     try {
+      // Format phone number before sending
+      const formattedData = {
+        ...formData,
+        // Ensure phone is formatted as US format
+        phone: formData.phone.replace(/^(\d{3})(\d{3})(\d{4})$/, '($1) $2-$3')
+      };
+      
+      console.log('Submitting quote request to API:', formattedData);
+      
       // Import the API service dynamically to avoid server-side issues
       const { submitQuoteRequest } = await import("@/services/api");
       
       // Submit the form data to the backend API
-      await submitQuoteRequest(formData);
+      const response = await submitQuoteRequest(formattedData);
+      console.log('API Response:', response);
       
       // Success
       toast({
@@ -183,14 +193,16 @@ export default function CreativeQuoteForm() {
         phone: "",
       })
       setStep(1)
-    } catch (error) {
-      // Handle error
+    } catch (error: any) {
+      // Enhanced error handling
+      console.error("Form submission error:", error);
+      console.error("Error details:", error.message || 'Unknown error');
+      
       toast({
         title: "Submission failed",
-        description: "There was a problem submitting your quote request. Please try again.",
+        description: error.message || "There was a problem submitting your quote request. Please try again.",
         variant: "destructive",
       })
-      console.error("Error submitting form:", error);
     } finally {
       setIsSubmitting(false)
     }

@@ -63,11 +63,11 @@ export default function ContactStep({ formData, updateFormData }: ContactStepPro
           <Input
             id="phone"
             type="tel"
-            placeholder="Enter your phone number"
-            value={formData.phone}
+            placeholder="(XXX) XXX-XXXX"
+            value={formData.phone.replace(/^(\d{3})(\d{3})(\d{4})$/, '($1) $2-$3').replace(/^\($/, '').replace(/[^\d()\s-]/g, '')}
             onChange={(e) => {
-              const phone = e.target.value.replace(/\D/g, "").slice(0, 10)
-              updateFormData("phone", phone)
+              const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
+              updateFormData("phone", digits);
             }}
             className="mt-2 bg-white dark:bg-gray-800"
           />
