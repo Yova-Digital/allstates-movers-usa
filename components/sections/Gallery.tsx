@@ -11,7 +11,7 @@ const images = [
     alt: "Moving Homes, Offices, and Everything In Between — With Care Across America Professional movers carefully wrapping and transporting household goods.",
   },
   {
-    src: "https://images.unsplash.com/photo-1633155565182-16c06ed45ec5?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8TW92aW5nJTIwdHJ1Y2slMjBiZWluZyUyMGxvYWRlZCUyMHdpdGglMjBmdXJuaXR1cmV8ZW58MHx8MHx8fDA%3D",
+    src: "./boxes.jpg",
     alt: "From Boxes to Beds — We Load It All with Care. Our expert movers ensure every household item is packed, loaded, and protected for the journey ahead.",
   },
   {
@@ -19,11 +19,11 @@ const images = [
     alt: "Welcome Home — Delivered With Care. We don’t just move furniture. We deliver comfort, memories, and a fresh start.",
   },
   {
-    src: "https://plus.unsplash.com/premium_photo-1682141929497-97402f35d45e?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fEZ1cm5pdHVyZSUyMHNhZmVseSUyMHNlY3VyZWQlMjBpbiUyMG1vdmluZyUyMHRydWNrfGVufDB8fDB8fHww",
+    src: "./boxes.jpeg",
     alt: "Team of professional movers",
   },
   {
-    src: "https://images.unsplash.com/photo-1614359835514-92f8ba196357?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8RnVybml0dXJlJTIwc2FmZWx5JTIwc2VjdXJlZCUyMGluJTIwbW92aW5nJTIwdHJ1Y2t8ZW58MHx8MHx8fDA%3D",
+    src: "./truck.jpeg",
     alt: "Your home safely secured in moving truck",
   },
 ]
