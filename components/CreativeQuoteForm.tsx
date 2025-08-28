@@ -12,7 +12,7 @@ import LocationStep from "./quote-form/LocationStep"
 import DetailsStep from "./quote-form/DetailsStep"
 import ContactStep from "./quote-form/ContactStep"
 import FormNavigation from "./quote-form/FormNavigation"
-import { FormData, Address } from "./quote-form/types"
+import { Address } from "./quote-form/types"
 
 // Import ZIP code service functions
 import { zipCoordinates, getZipCodeCity, getZipCodeState } from "./quote-form/zipCodeService"

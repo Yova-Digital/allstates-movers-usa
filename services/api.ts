@@ -4,7 +4,7 @@
  */
 
 // Base URL for API requests
-const API_BASE_URL = 'https://api.us50transport.com/api';
+const API_BASE_URL = 'https://api.allstatesmovers.llc/api';
 
 /**
  * Submit a quote request to the backend
