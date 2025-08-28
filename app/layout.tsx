@@ -9,7 +9,7 @@ import { Toaster } from "@/components/ui/toaster"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "US50 Transport LLC - Premium Furniture Moving Services",
+  title: "Allstates Movers  LLC - Premium Furniture Moving Services",
   description:
     "Professional furniture moving services across the United States. Reliable, secure, and efficient transportation for your valuable possessions.",
     generator: 'v0.dev'

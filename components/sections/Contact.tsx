@@ -137,7 +137,7 @@ export default function Contact() {
                   </div>
                   <div>
                     <h4 className="font-medium text-lg">Email</h4>
-                    <Link href="mailto:Us50transportllc@gmail.com" className="text-gray-600 dark:text-gray-400">Us50transportllc@gmail.com</Link>
+                    <Link href="mailto:Allstatesmovers1@gmail.com" className="text-gray-600 dark:text-gray-400">Allstatesmovers1@gmail.com</Link>
                   </div>
                 </div>
 

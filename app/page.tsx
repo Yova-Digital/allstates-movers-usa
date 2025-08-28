@@ -29,10 +29,10 @@ export default function Home() {
             <div className="text-white">
               <div className="flex space-x-4 mb-6">
                 <div className="border border-white/20 bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-sm">
-                  USDOT 4378213
+                  UsDot 4439827
                 </div>
                 <div className="border border-white/20 bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-sm">
-                  MC-1715829
+                  Mc-1748106
                 </div>
               </div>
 

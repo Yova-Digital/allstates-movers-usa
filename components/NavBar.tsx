@@ -49,7 +49,7 @@ export default function NavBar() {
 
             <Link href="/" className="flex items-center space-x-2">
               <Truck className="h-8 w-8" />
-              <span className="text-xl font-bold">US50 Transport</span>
+              <span className="text-xl font-bold">Allstates Movers </span>
             </Link>
             
           </div>

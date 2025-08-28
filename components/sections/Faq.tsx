@@ -11,7 +11,7 @@ const faqs = [
         <h3 className="font-bold text-blue-600 text-xl mb-2">Delivery Options</h3>
         
         <p>Need it fast or prefer to plan ahead? We've got you covered.</p>
-        <p>US50 Transport offers two flexible delivery services to meet your needs:</p>
+        <p>Allstates Movers  offers two flexible delivery services to meet your needs:</p>
         
         <div>
           <p className="font-medium text-blue-600">Express Delivery</p>
@@ -30,7 +30,7 @@ const faqs = [
         </div>
         
         <div className="mt-2">
-          <p className="font-medium text-blue-600">Why Choose US50 Transport?</p>
+          <p className="font-medium text-blue-600">Why Choose Allstates Movers ?</p>
           <ul className="list-disc pl-5 space-y-1">
             <li>Guaranteed delivery windows</li>
             <li>Real-time tracking</li>
@@ -58,7 +58,7 @@ const faqs = [
   {
     question: "Are you licensed and insured?",
     answer:
-      "Yes, US50 Transport is fully licensed and insured. We maintain all required federal and state licenses, including USDOT and MC numbers. We carry comprehensive cargo insurance, liability insurance, and workers' compensation.",
+      "Yes, Allstates Movers  is fully licensed and insured. We maintain all required federal and state licenses, including USDOT and MC numbers. We carry comprehensive cargo insurance, liability insurance, and workers' compensation.",
   },
   {
     question: "How do you handle delays due to weather or other circumstances?",

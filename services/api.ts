@@ -1,5 +1,5 @@
 /**
- * API service for US50 Transport LLC
+ * API service for Allstates Movers  LLC
  * Handles communication with the backend API
  */
 

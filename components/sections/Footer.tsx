@@ -124,7 +124,7 @@ export default function Footer() {
               </li>
               <li className="flex items-start">
                 <Mail className="text-blue-500 h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
-                <Link href="mailto:Us50transportllc@gmail.com" className="text-gray-400">Us50transportllc@gmail.com</Link>
+                <Link href="mailto:Allstatesmovers1@gmail.com" className="text-gray-400">Allstatesmovers1@gmail.com</Link>
               </li>
             </ul>
           </div>
@@ -133,7 +133,7 @@ export default function Footer() {
         <div className="border-t border-gray-800 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm mb-4 md:mb-0">
-              &copy; {new Date().getFullYear()} US50 Transport LLC. All rights reserved.
+              &copy; {new Date().getFullYear()} Allstates Movers  LLC. All rights reserved.
             </p>
           </div>
         </div>
